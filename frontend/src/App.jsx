@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import TaskForm from './TaskForm';
 import './App.css';
 
-function App() {
+const App = () => {
   const [tasks, setTasks] = useState([]);
-  const [title, setTitle] = useState('');
+  const [selectedTask, setSelectedTask] = useState(null);
 
   useEffect(() => {
-    axios.get('http://localhost:3001/tasks')
+    axios.get('http://localhost:3001/api/tasks')
       .then(response => {
         setTasks(response.data);
       })
@@ -16,41 +17,65 @@ function App() {
       });
   }, []);
 
-  const handleAddTask = (e) => {
-    e.preventDefault();
-    if (title.trim()) {
-      axios.post('http://localhost:3001/tasks', { title })
-        .then(response => {
-          setTasks([...tasks, response.data]);
-          setTitle('');
-        })
-        .catch(error => {
-          console.error('Error adding task:', error);
-        });
-    }
+  const handleTaskAdded = (newTask) => {
+    setTasks([...tasks, newTask]);
   };
+
+  const handleTaskUpdated = (updatedTask) => {
+    setTasks(tasks.map(task => (task.id === updatedTask.id ? updatedTask : task)));
+    setSelectedTask(null);
+  };
+
+  const handleTaskDeleted = (taskId) => {
+    axios.delete(`http://localhost:3001/api/tasks/${taskId}`)
+      .then(() => {
+        setTasks(tasks.filter(task => task.id !== taskId));
+      })
+      .catch(error => {
+        console.error('Error deleting task:', error);
+      });
+  };
+
+  const handleTaskCompleted = (task) => {
+    axios.put(`http://localhost:3001/api/tasks/${task.id}`, { completed: !task.completed, title: task.title })
+      .then(response => {
+        setTasks(tasks.map(t => (t.id === response.data.id ? response.data : t)));
+      })
+      .catch(error => {
+        console.error('Error updating task:', error);
+      });
+  };
+
+  const cancelEdit = () => {
+    setSelectedTask(null);
+  }
 
   return (
     <div className="App">
-      <header className="App-header">
+      <div className="container">
         <h1>Task List</h1>
-        <form onSubmit={handleAddTask}>
-          <input
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder="New task title"
-          />
-          <button type="submit">Add Task</button>
-        </form>
+        <TaskForm
+          task={selectedTask}
+          onTaskAdded={handleTaskAdded}
+          onTaskUpdated={handleTaskUpdated}
+          onCancelEdit={cancelEdit}
+        />
         <ul>
           {tasks.map(task => (
-            <li key={task.id}>{task.title}</li>
+            <li key={task.id} className={task.completed ? 'completed' : ''}>
+              <span onClick={() => handleTaskCompleted(task)}>
+                {task.title}
+              </span>
+              <div className="actions">
+                <button onClick={() => setSelectedTask(task)}>Edit</button>
+                <button className="delete-btn" onClick={() => handleTaskDeleted(task.id)}>Delete</button>
+              </div>
+            </li>
           ))}
         </ul>
-      </header>
+      </div>
     </div>
   );
-}
+};
 
 export default App;

@@ -1,11 +1,22 @@
-### Obtener todas las tareas
-GET http://localhost:3001/tasks
-Accept: application/json
+### Get all tasks
+GET http://localhost:3001/api/tasks
 
-### Crear una nueva tarea
-POST http://localhost:3001/tasks
+### Create a new task
+POST http://localhost:3001/api/tasks
 Content-Type: application/json
 
 {
-  "title": "Nueva tarea de ejemplo"
+  "title": "Do the laundry"
 }
+
+### Update a task
+PUT http://localhost:3001/api/tasks/1
+Content-Type: application/json
+
+{
+  "title": "Learn React and Vite",
+  "completed": true
+}
+
+### Delete a task
+DELETE http://localhost:3001/api/tasks/2

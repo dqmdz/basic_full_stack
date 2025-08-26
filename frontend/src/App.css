@@ -1,42 +1,120 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
+:root {
+  --primary-bg: #242424;
+  --secondary-bg: #1a1a1a;
+  --primary-text: rgba(255, 255, 255, 0.87);
+  --accent-color: #646cff;
+  --completed-color: #535bf2;
+  --danger-color: #ff6464;
+}
+
+body {
+  background-color: var(--primary-bg);
+  color: var(--primary-text);
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+}
+
+.App {
+  display: flex;
+  justify-content: center;
+  padding-top: 50px;
+}
+
+.container {
+  width: 100%;
+  max-width: 600px;
   padding: 2rem;
+  background-color: var(--secondary-bg);
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
   text-align: center;
+  margin-bottom: 2rem;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 2rem;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+input[type="text"] {
+  flex-grow: 1;
+  padding: 0.75rem;
+  border: 1px solid var(--accent-color);
+  border-radius: 4px;
+  background-color: var(--primary-bg);
+  color: var(--primary-text);
+  font-size: 1rem;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+button {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s;
 }
 
-.card {
-  padding: 2em;
+button[type="submit"] {
+  background-color: var(--accent-color);
+  color: white;
 }
 
-.read-the-docs {
-  color: #888;
+button[type="submit"]:hover {
+  background-color: var(--completed-color);
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  background-color: var(--primary-bg);
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+li.completed span {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
+li span {
+  cursor: pointer;
+  flex-grow: 1;
+}
+
+li .actions {
+  display: flex;
+  gap: 10px;
+}
+
+.actions button {
+  background-color: transparent;
+  color: var(--primary-text);
+  border: 1px solid var(--primary-text);
+}
+
+.actions button:hover {
+  background-color: var(--accent-color);
+  border-color: var(--accent-color);
+}
+
+.actions .delete-btn {
+  border-color: var(--danger-color);
+  color: var(--danger-color);
+}
+
+.actions .delete-btn:hover {
+  background-color: var(--danger-color);
+  color: white;
 }
